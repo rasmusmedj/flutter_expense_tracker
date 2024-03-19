@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_expense_tracker/widgets/expenses_list/expenses_list.dart';
 
 import 'new_expense.dart';
@@ -28,19 +27,19 @@ class _ExpensesState extends State<Expenses> {
       date: DateTime.now().subtract(const Duration(days: 1)),
       category: Category.work,
     ),
-    Expense(
-      title: 'VR Headset',
-      amount: 500,
-      date: DateTime.now().subtract(const Duration(days: 2)),
-      category: Category.leisure,
-    ),
   ];
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => const NewExpense(),
+      builder: (ctx) => NewExpense(onAddExpense: _addExpense),
     );
+  }
+
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
   }
 
   @override
@@ -54,7 +53,9 @@ class _ExpensesState extends State<Expenses> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {_openAddExpenseOverlay();},
+            onPressed: () {
+              _openAddExpenseOverlay();
+            },
           ),
         ],
       ),
